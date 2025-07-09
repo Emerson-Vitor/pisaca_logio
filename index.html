@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piscalógio do Mitinho</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Orbitron', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background-image: url('https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=2029&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        .clock-container {
+            text-shadow: 0 0 15px rgba(236, 72, 153, 0.6), 0 0 25px rgba(236, 72, 153, 0.4);
+        }
+        .blinking-colon {
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            0%, 49% {
+                opacity: 1;
+            }
+            50%, 100% {
+                opacity: 0;
+            }
+        }
+        .slideshow-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 1.2s ease-in-out;
+            border-radius: 1rem;
+        }
+        .slideshow-image.active {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="text-pink-500 flex flex-col lg:flex-row items-center justify-center min-h-screen gap-10 p-4">
+
+    <div class="text-center">
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-white" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">Piscalógio do Mitinho</h1>
+        <p class="text-lg md:text-xl text-rose-100 mb-8" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Horário Oficial de Brasília (UTC-3)</p>
+        
+        <div id="clock" class="clock-container bg-white bg-opacity-75 rounded-2xl p-6 md:p-10 inline-flex items-center justify-center border-2 border-pink-200/80 shadow-xl">
+            <span id="hours" class="text-7xl md:text-9xl font-bold tracking-wider text-pink-600">00</span>
+            <span class="blinking-colon text-7xl md:text-9xl font-bold mx-2 text-pink-600">:</span>
+            <span id="minutes" class="text-7xl md:text-9xl font-bold tracking-wider text-pink-600">00</span>
+            <span class="blinking-colon text-7xl md:text-9xl font-bold mx-2 text-pink-600">:</span>
+            <span id="seconds" class="text-7xl md:text-9xl font-bold tracking-wider text-pink-600">00</span>
+        </div>
+    </div>
+
+    <div class="w-11/12 md:w-1/2 lg:w-1/3 aspect-square max-w-lg bg-white bg-opacity-75 rounded-2xl p-3 border-2 border-pink-200/80 shadow-xl mt-8 lg:mt-0 relative overflow-hidden">
+        <img src="https://i.ytimg.com/vi/z_fTNQN86IE/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLBHRLIRYQwxO-zPBl7WuCrf6-DHMA" class="slideshow-image active" alt="Orochinho 1" onerror="this.onerror=null;this.src='https://placehold.co/512x512/FFE4E6/db2777?text=Imagem+1';">
+        <img src="https://i.pinimg.com/736x/d1/ac/91/d1ac9173c45879f25187d6231b9c877f.jpg" class="slideshow-image" alt="Orochinho 2" onerror="this.onerror=null;this.src='https://placehold.co/512x512/FFE4E6/db2777?text=Imagem+2';">
+         </div>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const utcTime = now.getTime() + (now.getTimezoneOffset() * 60000);
+            const brasiliaTime = new Date(utcTime - (3 * 3600 * 1000));
+
+            let hours = brasiliaTime.getHours();
+            let minutes = brasiliaTime.getMinutes();
+            let seconds = brasiliaTime.getSeconds();
+
+            hours = hours < 10 ? '0' + hours : hours;
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+
+            document.getElementById('hours').textContent = hours;
+            document.getElementById('minutes').textContent = minutes;
+            document.getElementById('seconds').textContent = seconds;
+        }
+
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        let currentImageIndex = 0;
+        const images = document.querySelectorAll('.slideshow-image');
+        const totalImages = images.length;
+
+        function showNextImage() {
+            images[currentImageIndex].classList.remove('active');
+            currentImageIndex = (currentImageIndex + 1) % totalImages;
+            images[currentImageIndex].classList.add('active');
+        }
+
+        setInterval(showNextImage, 3000);
+    </script>
+
+</body>
+</html>
